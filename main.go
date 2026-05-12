@@ -5,14 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sort"
 	"strings"
 )
-
-type NameCount struct {
-	Name  string
-	Count int
-}
 
 func CountNames(r io.Reader) (map[string]int, error) {
 	counts := make(map[string]int)
@@ -36,25 +30,10 @@ func CountNames(r io.Reader) (map[string]int, error) {
 	return counts, nil
 }
 
-func SortNameCounts(counts map[string]int) []NameCount {
-	result := make([]NameCount, 0, len(counts))
-
+func PrintNameCounts(counts map[string]int) {
 	for name, count := range counts {
-		result = append(result, NameCount{
-			Name:  name,
-			Count: count,
-		})
+		fmt.Printf("%s:%d\n", name, count)
 	}
-
-	sort.Slice(result, func(i, j int) bool {
-		if result[i].Count == result[j].Count {
-			return result[i].Name < result[j].Name
-		}
-
-		return result[i].Count > result[j].Count
-	})
-
-	return result
 }
 
 func main() {
@@ -83,9 +62,5 @@ func main() {
 		return
 	}
 
-	result := SortNameCounts(counts)
-
-	for _, item := range result {
-		fmt.Printf("%s:%d\n", item.Name, item.Count)
-	}
+	PrintNameCounts(counts)
 }
